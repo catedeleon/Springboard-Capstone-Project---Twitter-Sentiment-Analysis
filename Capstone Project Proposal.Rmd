@@ -1,0 +1,61 @@
+---
+title: Capstone Project Proposal
+subtitle: COSRX Twitter Sentiment Analysis
+author: Cate de Leon
+date: March 31, 2018
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The client:
+COSRX is a Korean cult-fave skincare beauty brand that is sold internationally.
+
+## Main question:
+### What is being said about COSRX on social media?
+
+Customers and enthusiasts are always sharing their opinions about products and brands on social media, and the beauty industry is definitely not exempted from this. Mining social media data would provide useful feedback to the brand about product reception, most common skincare concerns, most popular products, and even which brands/products are the strongest competition.
+
+This would help guide the client's decisions with respect to product development and even social media marketing.
+
+## The data
+
+Data will be extracted by creating a Twitter app via <http://apps.twitter.com>, which provides the following URLs, keys, and tokens necessary for extraction:
+
+```{r}
+library(twitteR)
+
+requestURL <- "https://api.twitter.com/oauth/request_token"
+accessURL <- "https://api.twitter.com/oauth/access_token"
+authURL <- "https://api.twitter.com/oauth/authorize"
+consumer_key <- 'bcYjokHoaGcYnKqGisZDhT6Pw'
+consumer_secret <- 'rj72U5PnPqpcMRmeRRIz1a8p61kid3KN8XhWIgqsiUEaopnZj2'
+access_token <- '32861039-x0q6cNKXyciSjxO3HDNr6L4KK29AJXI7JKRtDZYSl'
+access_secret <- 'YIzxg6YMsJf6spQvQuH8vJnWjoLJhDw32OusxJ5KEygI7'
+setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)
+```
+
+Using the searchTwitteR function (from the twitteR library), we will extract tweets that mention "cosrx" in the English language.
+
+```{r}
+tweets <- searchTwitteR("cosrx",n=10000,lang='en')
+tweetsDF <- twListToDF(tweets)
+write.csv(tweetsDF, "tweetsDF.csv")
+```
+
+## Approach
+
+1. Tokenize words using tidytext
+2. Look up most frequent words.
+2. Run sentiment analysis using tidytext.
+3. Get most frequent positive and negative words.
+4. Create wordclouds.
+5. Run a Latent Dirichlet allocation to get a sense of the topics being talked about.
+
+## Deliverables
+
+1. R code that extracts, wrangles, and analyzes the data.
+2. A report on the problem, process, and findings.
+3. A compelling, non-technical slide deck to present to the client.
